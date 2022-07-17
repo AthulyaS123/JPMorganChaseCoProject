@@ -1,4 +1,4 @@
-Methods administered by the minister coined the name tominister.
+Methods administered by the minister coined the name tominister (aka Tommy Fang).
 
 Only run with "runner" classes. Others might need a "walkthrough." These utilize scanners to scan. Thus, the user just enters information corresponding to the questions asked and the code will just do the work afterwards.
 
