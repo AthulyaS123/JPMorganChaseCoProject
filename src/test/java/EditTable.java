@@ -27,9 +27,6 @@ public class EditTable {
 
     private CqlSession session;
     private String keyspace;
-    private String tableName;
-    private int tu, ti = 0;
-
 
     public EditTable(CqlSession session, String ks){
         this.session=session;
@@ -38,7 +35,6 @@ public class EditTable {
         //list of tabel
         //multiple tables 100+
         //enter keyspace, tables available, click on tabel, next screen specific table (for each tabel, have modify methods), each row - edit button, goes to next screen (input - pass primary key/id) click - editabel data, modify data, save tehn input what tabel it came through and what primayr key and what the new values are - update/set/column names
-
     }
 
     public String getKeySpace(){
@@ -52,32 +48,14 @@ public class EditTable {
         return labels;
     }
 
-    public void setTTL(int timeUpdate, int timeInsert, int timeDelete){
-        //defualt = 0
-        //max = 630720000 (20 years)
-        tu = timeUpdate;
-        ti = timeInsert;
+    public void editRow(String table, Map<String, String>PKV,Map<String, String>CTV, int ttl, States states){
+        deleteRow(table, PKV);
+        insertRow(table, CTV, ttl, states);
     }
 
-
-    public void updateData(String tableName, Map<String, Object>labelsandValues, Map<String, Object>labelsandnewValues){
-        List<String> labels = getPrimaryKeyLabels(tableName);
-        StringBuilder query =  new StringBuilder("UPDATE " + keyspace + "." + tableName);
-        if(tu != 0){
-            query.append(" USING TTL " + tu);
-        }
-        query.append(" SET ");
-        labelsandnewValues.forEach((key,value)-> query.append(key + "=" + value.toString() + ", "));
-        query.deleteCharAt(query.length()-2).append(" WHERE ");
-        labelsandValues.forEach((key, value)-> query.append(key + "=" + value + " and "));
-        query.delete(query.length()-5,query.length()).append(";");
-        System.out.println(query);
-        session.execute(String.valueOf(query));
-    }
-
-    public void deleteRow(String keyspace,String table, Map<String,String>CTV){
+    public void deleteRow(String table, Map<String,String>PKV){
         StringBuilder query = new StringBuilder("DELETE FROM " + keyspace+"."+table + " WHERE ");
-        CTV.forEach((key,value)->{
+        PKV.forEach((key,value)->{
             query.append(key+"="+ value);
             query.append(" and ");
         });
@@ -86,18 +64,26 @@ public class EditTable {
         session.execute(String.valueOf(query));
     }
 
-    public void insertData(String keyspace, String tableName, ArrayList<String>labels, ArrayList<String>rows) {
-        String use="USE "+keyspace+";";
-        session.execute(use);
-        StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (");
-        for(int i=0;i<labels.size()-1;i++){
-            query.append(labels.get(i) +", ");
+    public void insertRow(String tableName, Map<String, String>CTV, int ttlI, States states) {
+        StringBuilder query = new StringBuilder("INSERT INTO " + keyspace+"."+ tableName + "(");
+        CTV.forEach((key,value)->{
+            query.append(key+", ");
+        });
+        query.delete(query.length()-2,query.length());
+        query.append(") VALUES(");
+        CTV.forEach((key,value)->{
+            query.append(value+", ");
+        });
+        query.delete(query.length()-2,query.length());
+        if(ttlI>0) {
+            query.append(") USING TTL " + ttlI + ";");
         }
-        query.append(labels.get(labels.size()-1) + ")");
-        for (String values : rows) {
-            StringBuilder q = new StringBuilder(query + " VALUES(" + values + ")" +" USING TTL" + ti +";");
-            session.execute(String.valueOf(q));
-        }
+        else
+            query.append(");");
+        session.execute(String.valueOf(query));
+
+        states.count();
+
     }
 
     public List<Row> getPrimaryKeyValue(boolean entireTable, String tableName){
@@ -133,7 +119,7 @@ public class EditTable {
         query = new StringBuilder("DROP TABLE " + tableName + ";");
         session.execute(String.valueOf(query));
     }
-//-----------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------
 
     public Map<CqlIdentifier, DataType> getColDefs(String keyspace, String table)
     {
@@ -156,6 +142,18 @@ public class EditTable {
         for(Row x:result){
             System.out.println(x); //-> @120398120941, @120948120, @1209821905  # of rows
         }
+    }
+
+    public void updateDataNOTINUSELMFAO(String tableName, Map<String, Object>labelsandValues, Map<String, Object>labelsandnewValues){
+        List<String> labels = getPrimaryKeyLabels(tableName);
+        StringBuilder query =  new StringBuilder("UPDATE " + keyspace + "." + tableName);
+        query.append(" SET ");
+        labelsandnewValues.forEach((key,value)-> query.append(key + "=" + value.toString() + ", "));
+        query.deleteCharAt(query.length()-2).append(" WHERE ");
+        labelsandValues.forEach((key, value)-> query.append(key + "=" + value + " and "));
+        query.delete(query.length()-5,query.length()).append(";");
+        System.out.println(query);
+        session.execute(String.valueOf(query));
     }
 
 //    public void getPrimaryKey(String tableName){
