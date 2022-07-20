@@ -28,6 +28,7 @@ public class KeyspaceRepository {
         xd.add("EB");
         xd.add("ZB");
     }
+    //hi
     public List<String> getKeyspaceList() {
         Select select = QueryBuilder.selectFrom("system_schema", "keyspaces").all();
         ResultSet rs = session.execute(select.build());
