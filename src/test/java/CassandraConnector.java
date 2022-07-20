@@ -14,14 +14,6 @@ public class CassandraConnector
 
         session = builder.build();
     }
-    public void connect(String node, Integer port, String dataCenter, String username, String password) {
-        CqlSessionBuilder builder = CqlSession.builder();
-        builder.addContactPoint(new InetSocketAddress(node, port));
-        builder.withLocalDatacenter(dataCenter);
-        builder.withAuthCredentials(username, password);
-
-        session = builder.build();
-    }
 
     public CqlSession getSession() {
         return this.session;
