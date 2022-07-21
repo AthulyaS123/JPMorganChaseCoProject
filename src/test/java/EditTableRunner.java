@@ -1,8 +1,4 @@
-import com.datastax.oss.driver.api.core.cql.Row;
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 import java.io.IOException;
-import java.util.*;
 
 
 public class EditTableRunner {
@@ -11,7 +7,10 @@ public class EditTableRunner {
         connector.connect("127.0.0.1", 9042, "datacenter1");
 //        EditTable table = new EditTable(connector.getSession(), "tutorialspoint");
 //        TableMethods tableMethods = new TableMethods(connector.getSession());
-//        KeyspaceRepository urMOM = new KeyspaceRepository(connector.getSession());
+        AccessKeySpace urMOM = new AccessKeySpace(connector.getSession());
+        System.out.println(urMOM.clusterName());
+
+//        System.out.println(urMOM.getTableSizes());
 //        ArrayList<String> labels = new ArrayList<>();
 //        labels.add("name");
 //        labels.add("grade");

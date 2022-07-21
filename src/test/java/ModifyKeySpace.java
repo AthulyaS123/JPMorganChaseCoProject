@@ -11,8 +11,8 @@ import java.lang.reflect.Member;
 import java.util.*;
 
 /*
-Created by Athulya Saravanakumr 7/5/2022
-- Thanks for the help Tommy & Vikas
+Created by Athulya, Tommy, Vikas 7/5/2022
+
 
 Functionalities:
 - Edit Table
@@ -23,12 +23,12 @@ Functionalities:
 - TTL
  */
 
-public class EditTable {
+public class ModifyKeySpace {
 
     private CqlSession session;
     private String keyspace;
 
-    public EditTable(CqlSession session, String ks){
+    public ModifyKeySpace(CqlSession session, String ks){
         this.session=session;
         this.keyspace = ks;
         //pass keyspace paramter, 1 keyspace only

@@ -1,5 +1,4 @@
 enum States {
-
      START{
         @Override
         boolean count(){
@@ -15,16 +14,23 @@ enum States {
          public boolean checkUpgrade(){
             return false;
          }
+
+         @Override
+         public String getNotifications(){
+             return "Wrong State, @ START";
+         }
     },
 
     RUNNING{
-        int numRows = 0;
-        Notifications notifications = Notifications.NOUPGRADE;
+        public int numRows =0;
+        public Notifications notifications = Notifications.NOUPGRADE;
+
         @Override
         boolean count(){
             numRows++;
             return true;
         }
+
         @Override
         public States nextState(){
             return END;
@@ -32,28 +38,44 @@ enum States {
 
         @Override
         public boolean checkUpgrade(){
-            if(numRows>69){
+            if(numRows>2){
                 notifications = Notifications.UPGRADE;
             }
             return true;
         }
+
+        @Override
+        public String getNotifications(){
+            return notifications.getNotification();
+        }
     },
 
     END{
+
         @Override
         boolean count(){
         return false;
         }
+
         @Override
         public States nextState(){
             return START;
         }
+
         @Override
-        public boolean checkUpgrade(){
+        public boolean checkUpgrade() {
             return false;
         }
+
+        @Override
+        public String getNotifications(){
+            return "Wrong State, @ END";
+        }
     };
+
     abstract boolean count();
     abstract States nextState();
     abstract boolean checkUpgrade();
+    abstract String getNotifications();
+
 }

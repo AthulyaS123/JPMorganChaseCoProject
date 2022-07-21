@@ -1,8 +1,15 @@
 public enum Notifications{
     UPGRADE{
         String upgrade = "Upgrade Server";
+        public String getNotification(){
+            return upgrade;
+        }
     },
     NOUPGRADE{
-        String noUpgrade = "Do NOT Upgrade Server";
+        String upgrade = "Do NOT Upgrade Server";
+        public String getNotification(){
+            return upgrade;
+        }
     };
+    public abstract String getNotification();
 }

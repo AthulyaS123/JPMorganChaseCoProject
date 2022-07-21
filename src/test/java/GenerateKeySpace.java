@@ -10,12 +10,12 @@ Created by Tommy Fang 7/3/2022
 Big thanks to Athulya and Vikas!
  */
 
-public class TableMethods {
+public class GenerateKeySpace {
 
     private CqlSession session;
 
     //constructor
-    public TableMethods(CqlSession session){
+    public GenerateKeySpace(CqlSession session){
         this.session=session;
     }
 
