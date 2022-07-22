@@ -1,12 +1,15 @@
 import java.util.HashMap;
 import java.util.Map;
 
+//Made by Athulya Saravankumar 7/20/22
+//Runner Class for testing out metrics, must be incorporated into UI
+
 public class Metrics {
     public static void main(String[] args) {
         CassandraConnector connector = new CassandraConnector();
         connector.connect("127.0.0.1", 9042, "datacenter1");
         ModifyKeySpace table = new ModifyKeySpace(connector.getSession(), "tutorialspoint");
-        Map<String, String> CTV = new HashMap<String, String>();
+        Map<String, Object> CTV = new HashMap<String, Object>();
         States state = States.START;
 
         System.out.println(state.getNotifications());
@@ -37,29 +40,6 @@ public class Metrics {
         System.out.println(state.getNotifications());
 
         connector.close();
-
-//        while (true) {
-//            int i = sc.nextInt();
-//            if (i == 0) {
-//                state = States.END;
-//            }
-//            if (i == 1) {
-//                state = States.RUNNING;
-//            }
-//
-//            switch (state) {
-//                case START:
-//                    break;
-//                case RUNNING:
-//                    System.out.println("running");
-//                    break;
-//                case END:
-//                    System.out.println("end");
-//                    break;
-//                default:
-//                    System.out.println("ur MOM");
-//                    break;
-//            }
         }
     }
 
